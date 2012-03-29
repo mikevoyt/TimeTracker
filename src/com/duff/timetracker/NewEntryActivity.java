@@ -2,7 +2,6 @@ package com.duff.timetracker;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.widget.TextView;
 
 /**
  * Allows user to enter a new time tracking entry
