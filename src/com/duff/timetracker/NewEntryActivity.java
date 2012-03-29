@@ -17,24 +17,17 @@ public class NewEntryActivity extends Activity
 {
 	private static String ADD_NEW = "Add New...";
 
-	private static String DOMAIN_NAME = "TimeTracker";
-	private static String USER_ATTRIBUTE_NAME = "User";
-	private static String DATE_ATTRIBUTE_NAME = "Date";
-	private static String PROJECT_ATTRIBUTE_NAME = "Project";
-	private static String TASK_ATTRIBUTE_NAME = "Task";
-	private static String HOURS_ATTRIBUTE_NAME = "Hours";
-
 	private Spinner mProjectSpinner;
 	private Spinner mTaskSpinner;
 	private EditText mHoursEditText;
 	private Button mSubmitButton;
 
-    /** Called when the activity is first created. */
-    @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
-				
-        super.onCreate(savedInstanceState);
+	/** Called when the activity is first created. */
+	@Override
+	public void onCreate(Bundle savedInstanceState)
+	{
+
+		super.onCreate(savedInstanceState);
 		setContentView(R.layout.new_entry);
 		mProjectSpinner = (Spinner)findViewById(R.id.selectProject);
 		mTaskSpinner = (Spinner)findViewById(R.id.selectTask);
@@ -44,7 +37,7 @@ public class NewEntryActivity extends Activity
 		initProjectSpinner();
 		initTaskSpinner();
 		initSubmitButton();
-    }
+	}
 
 	private void initProjectSpinner() {
 		List<String> list = new ArrayList<String>();
@@ -84,31 +77,31 @@ public class NewEntryActivity extends Activity
 
 			public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
 				if (adapterView.getItemAtPosition(i).toString().equals(ADD_NEW)) {
-					//bring up add new Project dialog
+					//todo: bring up add new Project dialog
 				}
 			}
 
 			public void onNothingSelected(AdapterView<?> adapterView) {
-				//To change body of implemented methods use File | Settings | File Templates.
 			}
-		});	}
+		});
+	}
 
 	private void initSubmitButton() {
 		mSubmitButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view) {
-				SimpleDB.createDomain(DOMAIN_NAME);
+				SimpleDB.createDomain(SimpleDB.DOMAIN_NAME);
 
 				String newItem = java.util.UUID.randomUUID().toString();
-				SimpleDB.createItem(DOMAIN_NAME, newItem);
+				SimpleDB.createItem(SimpleDB.DOMAIN_NAME, newItem);
 
-				SimpleDB.createAttributeForItem(DOMAIN_NAME, newItem, USER_ATTRIBUTE_NAME, "Mike Voytovich");
+				SimpleDB.createAttributeForItem(SimpleDB.DOMAIN_NAME, newItem, SimpleDB.USER_ATTRIBUTE_NAME, "Mike Voytovich");
 
-				String date = new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new java.util.Date());
-				SimpleDB.createAttributeForItem(DOMAIN_NAME, newItem, DATE_ATTRIBUTE_NAME, date);
+				String date = new java.text.SimpleDateFormat("MM/dd/yyyy HH:mm:ss a").format(new java.util.Date());
+				SimpleDB.createAttributeForItem(SimpleDB.DOMAIN_NAME, newItem, SimpleDB.DATE_ATTRIBUTE_NAME, date);
 
-				SimpleDB.createAttributeForItem(DOMAIN_NAME, newItem, PROJECT_ATTRIBUTE_NAME, "Nest");
-				SimpleDB.createAttributeForItem(DOMAIN_NAME, newItem, TASK_ATTRIBUTE_NAME, "Bug fixes");
-				SimpleDB.createAttributeForItem(DOMAIN_NAME, newItem, HOURS_ATTRIBUTE_NAME, "1.5");
+				SimpleDB.createAttributeForItem(SimpleDB.DOMAIN_NAME, newItem, SimpleDB.PROJECT_ATTRIBUTE_NAME, "Nest");
+				SimpleDB.createAttributeForItem(SimpleDB.DOMAIN_NAME, newItem, SimpleDB.TASK_ATTRIBUTE_NAME, "Bug fixes");
+				SimpleDB.createAttributeForItem(SimpleDB.DOMAIN_NAME, newItem, SimpleDB.HOURS_ATTRIBUTE_NAME, "1.5");
 			}
 		});
 	}

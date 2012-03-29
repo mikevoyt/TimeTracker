@@ -40,13 +40,19 @@ import com.amazonaws.services.simpledb.model.SelectRequest;
 
 public class SimpleDB {
 
+	public static String DOMAIN_NAME = "TimeTracker";
+	public static String USER_ATTRIBUTE_NAME = "User";
+	public static String DATE_ATTRIBUTE_NAME = "Date";
+	public static String PROJECT_ATTRIBUTE_NAME = "Project";
+	public static String TASK_ATTRIBUTE_NAME = "Task";
+	public static String HOURS_ATTRIBUTE_NAME = "Hours";
+
 	private static AmazonSimpleDBClient mSdbClient;
 
 	private static AmazonSimpleDBClient sdb = null;
 	private static String nextToken = null;
 	private static int prevNumDomains = 0;
-	public static final String DOMAIN_NAME = "_domain_name";
-		
+
 	public static AmazonSimpleDBClient getInstance() {
 		if (mSdbClient == null) {
 			AWSCredentials credentials = new BasicAWSCredentials(PropertyLoader.getInstance().getAccessKey(), PropertyLoader.getInstance().getSecretKey());
@@ -116,6 +122,12 @@ public class SimpleDB {
 		
 		return itemNames;
 	}
+
+	public static List<Item> getItemNamesForDomainFromUser(String domainName, String userName) {
+		SelectRequest selectRequest = new SelectRequest( "select * from " + domainName + " where " + USER_ATTRIBUTE_NAME + " = '" + userName + "'" ).withConsistentRead( true );
+		return getInstance().select( selectRequest ).getItems();
+	}
+
 
 	public static HashMap<String,String> getAttributesForItem( String domainName, String itemName ) {
 		GetAttributesRequest getRequest = new GetAttributesRequest( domainName, itemName ).withConsistentRead( true );
