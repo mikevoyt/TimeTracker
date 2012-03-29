@@ -96,7 +96,7 @@ public class NewEntryActivity extends Activity
 
 				SimpleDB.createAttributeForItem(SimpleDB.DOMAIN_NAME, newItem, SimpleDB.USER_ATTRIBUTE_NAME, "Mike Voytovich");
 
-				String date = new java.text.SimpleDateFormat("MM/dd/yyyy HH:mm:ss a").format(new java.util.Date());
+				String date = new java.text.SimpleDateFormat("MM/dd/yyyy hh:mm:ss a").format(new java.util.Date());
 				SimpleDB.createAttributeForItem(SimpleDB.DOMAIN_NAME, newItem, SimpleDB.DATE_ATTRIBUTE_NAME, date);
 
 				SimpleDB.createAttributeForItem(SimpleDB.DOMAIN_NAME, newItem, SimpleDB.PROJECT_ATTRIBUTE_NAME, "Nest");

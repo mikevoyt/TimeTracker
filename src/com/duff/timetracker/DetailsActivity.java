@@ -9,6 +9,7 @@ import com.amazonaws.services.simpledb.model.Attribute;
 import com.amazonaws.services.simpledb.model.Item;
 import com.duff.timetracker.simpledb.SimpleDB;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -22,21 +23,29 @@ public class DetailsActivity extends ListActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+
 		List<Item> items = SimpleDB.getItemNamesForDomainFromUser(SimpleDB.DOMAIN_NAME, "Mike Voytovich");
 
-		HashMap<String,String> attributeMap = new HashMap<String,String>(30);
+		List<String> dates = new ArrayList<String>();
+
 		for (Item item : items) {
 			String itemName = item.getName();
 			List<Attribute> attributes = item.getAttributes();
 			for (Attribute attribute : attributes) {
 				String name = attribute.getName();
 				String value = attribute.getValue();
+				if (name.equals(SimpleDB.DATE_ATTRIBUTE_NAME)) dates.add(value);
 
-				attributeMap.put(name, value);
 			}
 		}
 
 		Log.d(TAG, "items: " + items);
-		//setListAdapter(new ArrayAdapter<String>(this, R.layout.list_item, items.values()));
+		setListAdapter(new ArrayAdapter<String>(this, R.layout.list_item, dates));
 	}
 }
