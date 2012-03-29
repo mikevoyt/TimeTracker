@@ -47,6 +47,7 @@
     <orderEntry type="library" name="Maven: org.springframework.android:spring-android-core:1.0.0.BUILD-SNAPSHOT" level="project" />
     <orderEntry type="jdk" jdkName="Android 2.1 Platform" jdkType="Android SDK" />
     <orderEntry type="library" name="android-support-v4" level="application" />
+    <orderEntry type="library" name="aws-android-sdk-1.2.0-core" level="project" />
   </component>
 </module>
 

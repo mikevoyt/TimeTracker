@@ -4,7 +4,9 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.*;
+import com.duff.timetracker.simpledb.SimpleDB;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,11 +48,16 @@ public class NewEntryActivity extends Activity
 				android.R.layout.simple_spinner_item, list);
 		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		mProjectSpinner.setAdapter(dataAdapter);
-		mProjectSpinner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-			public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+		mProjectSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+			public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
 				if (adapterView.getItemAtPosition(i).toString().equals(ADD_NEW)) {
 					//bring up add new Project dialog
 				}
+			}
+
+			public void onNothingSelected(AdapterView<?> adapterView) {
+				//To change body of implemented methods use File | Settings | File Templates.
 			}
 		});
 	}
@@ -65,19 +72,29 @@ public class NewEntryActivity extends Activity
 				android.R.layout.simple_spinner_item, list);
 		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		mTaskSpinner.setAdapter(dataAdapter);
-		mTaskSpinner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-			public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+		mTaskSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+			public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
 				if (adapterView.getItemAtPosition(i).toString().equals(ADD_NEW)) {
-					//bring up add new Task dialog
+					//bring up add new Project dialog
 				}
 			}
-		});
-	}
+
+			public void onNothingSelected(AdapterView<?> adapterView) {
+				//To change body of implemented methods use File | Settings | File Templates.
+			}
+		});	}
 
 	private void initSubmitButton() {
 		mSubmitButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view) {
 				//todo: submit to SimpleDB
+				String domainName = "TimeTracker";
+				SimpleDB.createDomain(domainName);
+				String itemName = java.util.UUID.randomUUID().toString(); 
+				SimpleDB.createItem(domainName, itemName);
+				String date = new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new java.util.Date());
+				SimpleDB.createAttributeForItem(domainName, itemName, "date", date);
 			}
 		});
 	}
