@@ -32,20 +32,24 @@ public class DetailsActivity extends ListActivity {
 
 		List<Item> items = SimpleDB.getItemNamesForDomainFromUser(SimpleDB.DOMAIN_NAME, "Mike Voytovich");
 
-		List<String> dates = new ArrayList<String>();
+		ArrayList<TimeEntryRecord> records = new ArrayList<TimeEntryRecord>();
 
 		for (Item item : items) {
 			String itemName = item.getName();
 			List<Attribute> attributes = item.getAttributes();
+			TimeEntryRecord record = new TimeEntryRecord();
 			for (Attribute attribute : attributes) {
 				String name = attribute.getName();
 				String value = attribute.getValue();
-				if (name.equals(SimpleDB.DATE_ATTRIBUTE_NAME)) dates.add(value);
-
+				if (name.equals(SimpleDB.DATE_ATTRIBUTE_NAME)) record.setDate(value);
+				if (name.equals(SimpleDB.TASK_ATTRIBUTE_NAME)) record.setTask(value);
+				if (name.equals(SimpleDB.PROJECT_ATTRIBUTE_NAME)) record.setProject(value);
+				if (name.equals(SimpleDB.HOURS_ATTRIBUTE_NAME)) record.setHours(value);
 			}
+			records.add(record);
 		}
 
 		Log.d(TAG, "items: " + items);
-		setListAdapter(new ArrayAdapter<String>(this, R.layout.list_item, dates));
+		setListAdapter(new TimeEntryAdapter(this, R.layout.list_item, records));
 	}
 }
