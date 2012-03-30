@@ -4,6 +4,7 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:padding="10dp"
 >
 <TextView
         android:id="@+id/date"
@@ -21,36 +22,41 @@
             android:layout_alignParentLeft="true"
             android:textSize="20dp"
             android:text="Nest"
-            android:padding="6dp" />
+            android:paddingLeft="6dp" />
 
     <TextView
             android:id="@+id/task"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/project"
-            android:textSize="20dp"
+            android:layout_below="@id/project"
+            android:textSize="15dp"
             android:text="Bugs"
-            android:padding="6dp" />
+            android:paddingLeft="6dp"
+            android:layout_marginLeft="10sp"
+            />
+
+
+    <TextView
+            android:id="@+id/labelHours"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/date"
+            android:textSize="20dp"
+            android:text="hours"
+            android:paddingRight="6dp"
+            android:paddingLeft="5dp"
+             />
+
 
     <TextView
             android:id="@+id/hours"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/task"
-            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@id/labelHours"
+            android:layout_below="@id/date"
             android:textSize="20dp"
-            android:text="1.5"
-            android:padding="6dp" />
-
-    <TextView
-            android:id="@+id/hoursLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/hours"
-            android:layout_centerVertical="true"
-            android:textSize="15dp"
-            android:text="hours"
+            android:text="0.5"
             android:padding="0dp" />
-
 
 </RelativeLayout>

@@ -24,13 +24,15 @@ public class DetailsActivity extends ListActivity {
 		super.onCreate(savedInstanceState);
 
 
+
+
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
 
-		List<Item> items = SimpleDB.getItemNamesForDomainFromUser(SimpleDB.DOMAIN_NAME, "Mike Voytovich");
+		List<Item> items = SimpleDB.getItemNamesForDomainFromUser(SimpleDB.DOMAIN_NAME, AppPreferences.getUserName());
 
 		ArrayList<TimeEntryRecord> records = new ArrayList<TimeEntryRecord>();
 

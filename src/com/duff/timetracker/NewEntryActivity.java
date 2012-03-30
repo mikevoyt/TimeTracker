@@ -37,6 +37,10 @@ public class NewEntryActivity extends Activity
 		initProjectSpinner();
 		initTaskSpinner();
 		initSubmitButton();
+		AppPreferences.initAppPreferences(this);
+		if (AppPreferences.getUserName() == null) {
+			//todo: launch user-name dialog
+		}
 	}
 
 	private void initProjectSpinner() {
@@ -58,7 +62,6 @@ public class NewEntryActivity extends Activity
 			}
 
 			public void onNothingSelected(AdapterView<?> adapterView) {
-				//To change body of implemented methods use File | Settings | File Templates.
 			}
 		});
 	}
@@ -89,19 +92,29 @@ public class NewEntryActivity extends Activity
 	private void initSubmitButton() {
 		mSubmitButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view) {
+
+				if (AppPreferences.getUserName() == null) {
+					//todo: launch user-name dialog
+					return;
+				}
+
+				String project = (String)mProjectSpinner.getSelectedItem();
+				String task = (String)mTaskSpinner.getSelectedItem();
+				String hours = mHoursEditText.getText().toString();
+
 				SimpleDB.createDomain(SimpleDB.DOMAIN_NAME);
 
 				String newItem = java.util.UUID.randomUUID().toString();
 				SimpleDB.createItem(SimpleDB.DOMAIN_NAME, newItem);
 
-				SimpleDB.createAttributeForItem(SimpleDB.DOMAIN_NAME, newItem, SimpleDB.USER_ATTRIBUTE_NAME, "Mike Voytovich");
+				SimpleDB.createAttributeForItem(SimpleDB.DOMAIN_NAME, newItem, SimpleDB.USER_ATTRIBUTE_NAME, AppPreferences.getUserName());
 
 				String date = new java.text.SimpleDateFormat("MM/dd/yyyy hh:mm:ss a").format(new java.util.Date());
 				SimpleDB.createAttributeForItem(SimpleDB.DOMAIN_NAME, newItem, SimpleDB.DATE_ATTRIBUTE_NAME, date);
 
-				SimpleDB.createAttributeForItem(SimpleDB.DOMAIN_NAME, newItem, SimpleDB.PROJECT_ATTRIBUTE_NAME, "Nest");
-				SimpleDB.createAttributeForItem(SimpleDB.DOMAIN_NAME, newItem, SimpleDB.TASK_ATTRIBUTE_NAME, "Bug fixes");
-				SimpleDB.createAttributeForItem(SimpleDB.DOMAIN_NAME, newItem, SimpleDB.HOURS_ATTRIBUTE_NAME, "1.5");
+				SimpleDB.createAttributeForItem(SimpleDB.DOMAIN_NAME, newItem, SimpleDB.PROJECT_ATTRIBUTE_NAME, project);
+				SimpleDB.createAttributeForItem(SimpleDB.DOMAIN_NAME, newItem, SimpleDB.TASK_ATTRIBUTE_NAME, task);
+				SimpleDB.createAttributeForItem(SimpleDB.DOMAIN_NAME, newItem, SimpleDB.HOURS_ATTRIBUTE_NAME, hours);
 			}
 		});
 	}

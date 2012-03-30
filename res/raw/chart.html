@@ -1,0 +1,28 @@
+<html>
+<head>
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+        google.load("visualization", "1", {packages:["corechart"]});
+        google.setOnLoadCallback(drawChart);
+        function drawChart() {
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Task');
+        data.addColumn('number', 'Hours per Day');
+        data.addRows([
+        ['Nest 2.1',    11],
+        ['Duff bugs',   2],
+        ]);
+
+        var options = {
+        title: 'My Time'
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
+        chart.draw(data, options);
+        }
+    </script>
+</head>
+<body>
+<div id="chart_div" style="width: 350px; height: 500px;"></div>
+</body>
+</html>
