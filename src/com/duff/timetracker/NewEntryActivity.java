@@ -1,8 +1,10 @@
 package com.duff.timetracker;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -101,6 +103,17 @@ public class NewEntryActivity extends Activity
 
 				if (AppPreferences.getUserName() == null) {
 					//todo: launch user-name dialog
+					return;
+				}
+
+
+				if (mHoursEditText.getText().toString().equals("")) {
+					AlertDialog alertDialog = new AlertDialog.Builder(mContext).setTitle("Error").setMessage("Please enter hours").create();
+					alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int which) {
+							return;
+						} });
+					alertDialog.show();
 					return;
 				}
 

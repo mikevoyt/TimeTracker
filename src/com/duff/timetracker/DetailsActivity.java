@@ -85,6 +85,8 @@ public class DetailsActivity extends ListActivity {
 			return null;
 		}
 
+		//todo: move updating the list adapter to onProgressUpdate
+
 		@Override
 		protected void onPostExecute(String result) {
 			mProgressDialog.hide();
