@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.*;
 import com.duff.timetracker.simpledb.SimpleDB;
@@ -147,6 +148,11 @@ public class NewEntryActivity extends Activity
 		@Override
 		protected void onPostExecute(String result) {
 			mProgressDialog.hide();
+			mHoursEditText.setText("");
+
+			Toast toast = Toast.makeText(mContext, "Submitted!", 3000);
+			toast.setGravity(Gravity.CENTER, 0, 0);
+			toast.show();
 		}
 	}
 
