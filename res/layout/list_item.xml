@@ -35,6 +35,17 @@
             android:layout_marginLeft="10sp"
             />
 
+    <TextView
+            android:id="@+id/notes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/task"
+            android:textSize="15dp"
+            android:text=""
+            android:paddingLeft="6dp"
+            android:layout_marginLeft="10sp"
+            />
+
 
     <TextView
             android:id="@+id/labelHours"

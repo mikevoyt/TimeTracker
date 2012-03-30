@@ -26,6 +26,7 @@ public class NewEntryActivity extends Activity
 	private Spinner mProjectSpinner;
 	private Spinner mTaskSpinner;
 	private EditText mHoursEditText;
+	private EditText mNotesEditText;
 	private Button mSubmitButton;
 	private Context mContext;
 
@@ -39,6 +40,7 @@ public class NewEntryActivity extends Activity
 		mProjectSpinner = (Spinner)findViewById(R.id.selectProject);
 		mTaskSpinner = (Spinner)findViewById(R.id.selectTask);
 		mHoursEditText = (EditText)findViewById(R.id.enterHours);
+		mNotesEditText = (EditText)findViewById(R.id.notes);
 		mSubmitButton = (Button)findViewById(R.id.submit);
 		mContext = this;
 
@@ -141,6 +143,7 @@ public class NewEntryActivity extends Activity
 			String project = (String)mProjectSpinner.getSelectedItem();
 			String task = (String)mTaskSpinner.getSelectedItem();
 			String hours = mHoursEditText.getText().toString();
+			String notes = mNotesEditText.getText().toString();
 
 			SimpleDB.createDomain(SimpleDB.DOMAIN_NAME);
 
@@ -155,6 +158,7 @@ public class NewEntryActivity extends Activity
 			SimpleDB.createAttributeForItem(SimpleDB.DOMAIN_NAME, newItem, SimpleDB.PROJECT_ATTRIBUTE_NAME, project);
 			SimpleDB.createAttributeForItem(SimpleDB.DOMAIN_NAME, newItem, SimpleDB.TASK_ATTRIBUTE_NAME, task);
 			SimpleDB.createAttributeForItem(SimpleDB.DOMAIN_NAME, newItem, SimpleDB.HOURS_ATTRIBUTE_NAME, hours);
+			SimpleDB.createAttributeForItem(SimpleDB.DOMAIN_NAME, newItem, SimpleDB.NOTES_ATTRIBUTE_NAME, notes);
 			return null;
 		}
 
@@ -162,6 +166,7 @@ public class NewEntryActivity extends Activity
 		protected void onPostExecute(String result) {
 			mProgressDialog.hide();
 			mHoursEditText.setText("");
+			mNotesEditText.setText("");
 
 			Toast toast = Toast.makeText(mContext, "Submitted!", 3000);
 			toast.setGravity(Gravity.CENTER, 0, 0);

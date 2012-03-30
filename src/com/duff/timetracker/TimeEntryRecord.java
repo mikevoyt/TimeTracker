@@ -8,6 +8,7 @@ public class TimeEntryRecord {
 	private String mTask;
 	private String mHours;
 	private String mDate;
+	private String mNotes;
 	
 	public TimeEntryRecord() {
 	}
@@ -28,6 +29,10 @@ public class TimeEntryRecord {
 		this.mDate = date;
 	}
 	
+	public void setNotes(String notes) {
+		this.mNotes = notes;
+	}
+	
 	public String getProject() {
 		return mProject;
 	}
@@ -42,5 +47,9 @@ public class TimeEntryRecord {
 	
 	public String getDate() {
 		return mDate;
+	}
+	
+	public String getNotes() {
+		return mNotes;
 	}
 }

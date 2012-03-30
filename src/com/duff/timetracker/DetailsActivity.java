@@ -76,6 +76,7 @@ public class DetailsActivity extends ListActivity {
 					if (name.equals(SimpleDB.TASK_ATTRIBUTE_NAME)) record.setTask(value);
 					if (name.equals(SimpleDB.PROJECT_ATTRIBUTE_NAME)) record.setProject(value);
 					if (name.equals(SimpleDB.HOURS_ATTRIBUTE_NAME)) record.setHours(value);
+					if (name.equals(SimpleDB.NOTES_ATTRIBUTE_NAME)) record.setNotes(value);
 				}
 				mRecords.add(record);
 			}

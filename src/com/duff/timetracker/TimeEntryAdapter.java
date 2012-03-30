@@ -36,12 +36,14 @@ public class TimeEntryAdapter extends ArrayAdapter<TimeEntryRecord> {
 			TextView project = (TextView) v.findViewById(R.id.project);
 			TextView task = (TextView) v.findViewById(R.id.task);
 			TextView hours = (TextView) v.findViewById(R.id.hours);
+			TextView notes = (TextView) v.findViewById(R.id.notes);
 
 
 			date.setText(record.getDate());
 			project.setText(record.getProject());
 			task.setText(record.getTask());
 			hours.setText(record.getHours());
+			notes.setText(record.getNotes());
 		}
 		return v;
 	}

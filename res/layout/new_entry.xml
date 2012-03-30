@@ -69,6 +69,24 @@
             android:imeOptions="actionDone"
             />
 
+    <TextView
+            android:id="@+id/notesLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="5dp"
+            android:text="Notes"
+            />
+
+    <EditText
+            android:id="@+id/notes"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:imeOptions="actionDone"
+            />
+
+
     <Button
             android:id="@+id/submit"
             android:layout_width="200dp"

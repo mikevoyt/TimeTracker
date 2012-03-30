@@ -46,6 +46,7 @@ public class SimpleDB {
 	public static String PROJECT_ATTRIBUTE_NAME = "Project";
 	public static String TASK_ATTRIBUTE_NAME = "Task";
 	public static String HOURS_ATTRIBUTE_NAME = "Hours";
+	public static String NOTES_ATTRIBUTE_NAME = "Notes";
 
 	private static AmazonSimpleDBClient mSdbClient;
 
