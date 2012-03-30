@@ -125,7 +125,7 @@ public class SimpleDB {
 	}
 
 	public static List<Item> getItemNamesForDomainFromUser(String domainName, String userName) {
-		SelectRequest selectRequest = new SelectRequest( "select * from " + domainName + " where " + USER_ATTRIBUTE_NAME + " = '" + userName + "'" ).withConsistentRead( true );
+		SelectRequest selectRequest = new SelectRequest( "select * from " + domainName + " where " + USER_ATTRIBUTE_NAME + " = '" + userName + "' intersection " + DATE_ATTRIBUTE_NAME + " is not null order by " + DATE_ATTRIBUTE_NAME + " asc" ).withConsistentRead( true );
 		return getInstance().select( selectRequest ).getItems();
 	}
 

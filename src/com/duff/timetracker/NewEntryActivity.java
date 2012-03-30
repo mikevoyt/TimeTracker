@@ -81,6 +81,7 @@ public class NewEntryActivity extends Activity
 		//TODO: get saved list
 		list.add("2.1 bugs");
 		list.add("2.1 features");
+		list.add("AWS and rails investigation");
 		list.add(ADD_NEW);
 		ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
 				android.R.layout.simple_spinner_item, list);
