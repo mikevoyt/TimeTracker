@@ -9,6 +9,7 @@ import java.util.List;
 public class Project {
 	private String mProjectName;
 	private List<String> mTasks = new ArrayList<String>();
+	private List<TimeEntryRecord> mTimeEntryRecords = new ArrayList<TimeEntryRecord>();  //todo: store records with project so we can build summaries
 	
 	public Project(String projectName) {
 		mProjectName = projectName;

@@ -1,5 +1,6 @@
 package com.duff.timetracker;
 
+import android.accounts.NetworkErrorException;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -13,6 +14,7 @@ import android.view.View;
 import android.widget.*;
 import com.amazonaws.AmazonClientException;
 import com.duff.timetracker.simpledb.SimpleDB;
+import com.duff.timetracker.simpledb.SimpleDBAccess;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -152,7 +154,7 @@ public class NewEntryActivity extends Activity
 	private class SubmitEntryTask extends AsyncTask<String, Void, String> {
 
 		private ProgressDialog mProgressDialog;
-		private AmazonClientException mException = null;
+		private NetworkErrorException mException = null;
 
 		@Override
 		protected void onPreExecute() {
@@ -171,22 +173,18 @@ public class NewEntryActivity extends Activity
 			String notes = mNotesEditText.getText().toString();
 
 			try {
-				SimpleDB.createDomain(SimpleDB.DOMAIN_NAME);
-
-				String newItem = java.util.UUID.randomUUID().toString();
-				SimpleDB.createItem(SimpleDB.DOMAIN_NAME, newItem);
-
-				SimpleDB.createAttributeForItem(SimpleDB.DOMAIN_NAME, newItem, SimpleDB.USER_ATTRIBUTE_NAME, AppPreferences.getUserName());
-
+				TimeEntryRecord timeEntryRecord = new TimeEntryRecord();
 				String date = new java.text.SimpleDateFormat("MM/dd/yyyy hh:mm:ss a").format(new java.util.Date());
-				SimpleDB.createAttributeForItem(SimpleDB.DOMAIN_NAME, newItem, SimpleDB.DATE_ATTRIBUTE_NAME, date);
+				timeEntryRecord.setDate(date);
+				timeEntryRecord.setProject(project);
+				timeEntryRecord.setTask(task);
+				timeEntryRecord.setHours(hours);
+				timeEntryRecord.setNotes(notes);
 
-				SimpleDB.createAttributeForItem(SimpleDB.DOMAIN_NAME, newItem, SimpleDB.PROJECT_ATTRIBUTE_NAME, project);
-				SimpleDB.createAttributeForItem(SimpleDB.DOMAIN_NAME, newItem, SimpleDB.TASK_ATTRIBUTE_NAME, task);
-				SimpleDB.createAttributeForItem(SimpleDB.DOMAIN_NAME, newItem, SimpleDB.HOURS_ATTRIBUTE_NAME, hours);
-				SimpleDB.createAttributeForItem(SimpleDB.DOMAIN_NAME, newItem, SimpleDB.NOTES_ATTRIBUTE_NAME, notes);
-			} catch (AmazonClientException e) {
-				Log.e(TAG,"AmazonClientException: " + e);
+				RemoteAccess remoteAccess = new SimpleDBAccess();  //swap this for different remote access mechanisms
+				remoteAccess.addNewEntry(timeEntryRecord);
+			} catch (NetworkErrorException e) {
+				Log.e(TAG,"NetworkErrorException: " + e);
 				mException = e;
 			}
 			return null;
