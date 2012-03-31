@@ -3,7 +3,6 @@ package com.duff.timetracker.simpledb;
 import android.accounts.NetworkErrorException;
 import android.util.Log;
 import com.amazonaws.AmazonClientException;
-import com.amazonaws.internal.StaticCredentialsProvider;
 import com.amazonaws.services.simpledb.model.Attribute;
 import com.amazonaws.services.simpledb.model.Item;
 import com.duff.timetracker.AppPreferences;
@@ -14,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
+ * the SimpleDB implementation for remote access.
  */
 public class SimpleDBAccess implements RemoteAccess  {
 	private static String TAG = "TimeTracker";
