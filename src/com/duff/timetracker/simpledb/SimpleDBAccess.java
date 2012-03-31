@@ -1,19 +1,53 @@
 package com.duff.timetracker.simpledb;
 
 import android.accounts.NetworkErrorException;
+import android.util.Log;
 import com.amazonaws.AmazonClientException;
+import com.amazonaws.internal.StaticCredentialsProvider;
+import com.amazonaws.services.simpledb.model.Attribute;
+import com.amazonaws.services.simpledb.model.Item;
 import com.duff.timetracker.AppPreferences;
 import com.duff.timetracker.RemoteAccess;
 import com.duff.timetracker.TimeEntryRecord;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
  */
-public class SimpleDBAccess implements RemoteAccess {
-	public ArrayList<TimeEntryRecord> getAllEntries() {
-		return null;
+public class SimpleDBAccess implements RemoteAccess  {
+	private static String TAG = "TimeTracker";
+
+	public ArrayList<TimeEntryRecord> getAllEntries() throws NetworkErrorException {
+
+		ArrayList<TimeEntryRecord> records = new ArrayList<TimeEntryRecord>();
+		
+		try {
+			List<Item> items = SimpleDB.getItemNamesForDomainFromUser(SimpleDB.DOMAIN_NAME, AppPreferences.getUserName());
+
+			for (Item item : items) {
+				String itemName = item.getName();
+				List<Attribute> attributes = item.getAttributes();
+				TimeEntryRecord record = new TimeEntryRecord();
+				for (Attribute attribute : attributes) {
+					String name = attribute.getName();
+					String value = attribute.getValue();
+					if (name.equals(SimpleDB.DATE_ATTRIBUTE_NAME)) record.setDate(value);
+					if (name.equals(SimpleDB.TASK_ATTRIBUTE_NAME)) record.setTask(value);
+					if (name.equals(SimpleDB.PROJECT_ATTRIBUTE_NAME)) record.setProject(value);
+					if (name.equals(SimpleDB.HOURS_ATTRIBUTE_NAME)) record.setHours(value);
+					if (name.equals(SimpleDB.NOTES_ATTRIBUTE_NAME)) record.setNotes(value);
+				}
+				records.add(record);
+			}
+
+			Log.d(TAG, "items: " + items);
+		} catch (AmazonClientException e) {
+			Log.e(TAG,"AmazonClientException: " + e);
+			throw new NetworkErrorException(e);
+		}		
+		return records;
 	}
 
 	public void addNewEntry(TimeEntryRecord entry) throws NetworkErrorException {

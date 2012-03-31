@@ -1,5 +1,6 @@
 package com.duff.timetracker;
 
+import android.accounts.NetworkErrorException;
 import android.app.Activity;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
@@ -15,6 +16,7 @@ import com.amazonaws.AmazonClientException;
 import com.amazonaws.services.simpledb.model.Attribute;
 import com.amazonaws.services.simpledb.model.Item;
 import com.duff.timetracker.simpledb.SimpleDB;
+import com.duff.timetracker.simpledb.SimpleDBAccess;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,9 +33,6 @@ public class DetailsActivity extends ListActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		mContext = this;
-
-
-
 	}
 
 	@Override
@@ -49,7 +48,7 @@ public class DetailsActivity extends ListActivity {
 
 		private ProgressDialog mProgressDialog;
 		ArrayList<TimeEntryRecord> mRecords;
-		private AmazonClientException mException = null;
+		private  NetworkErrorException mException = null;
 
 		@Override
 		protected void onPreExecute() {
@@ -57,36 +56,17 @@ public class DetailsActivity extends ListActivity {
 			mProgressDialog = new ProgressDialog(mContext);
 			mProgressDialog.setMessage("Loading data...");
 			mProgressDialog.show();
-
 		}
 
 		@Override
 		protected String doInBackground(String... params) {
 
 			try {
-				List<Item> items = SimpleDB.getItemNamesForDomainFromUser(SimpleDB.DOMAIN_NAME, AppPreferences.getUserName());
+				RemoteAccess remoteAccess = new SimpleDBAccess(); //swap this out for different back-ends
+				mRecords = remoteAccess.getAllEntries();
 
-				mRecords = new ArrayList<TimeEntryRecord>();
-
-				for (Item item : items) {
-					String itemName = item.getName();
-					List<Attribute> attributes = item.getAttributes();
-					TimeEntryRecord record = new TimeEntryRecord();
-					for (Attribute attribute : attributes) {
-						String name = attribute.getName();
-						String value = attribute.getValue();
-						if (name.equals(SimpleDB.DATE_ATTRIBUTE_NAME)) record.setDate(value);
-						if (name.equals(SimpleDB.TASK_ATTRIBUTE_NAME)) record.setTask(value);
-						if (name.equals(SimpleDB.PROJECT_ATTRIBUTE_NAME)) record.setProject(value);
-						if (name.equals(SimpleDB.HOURS_ATTRIBUTE_NAME)) record.setHours(value);
-						if (name.equals(SimpleDB.NOTES_ATTRIBUTE_NAME)) record.setNotes(value);
-					}
-					mRecords.add(record);
-				}
-
-				Log.d(TAG, "items: " + items);
-			} catch (AmazonClientException e) {
-				Log.e(TAG,"AmazonClientException: " + e);
+			} catch (NetworkErrorException e) {
+				Log.e(TAG,"NetworkErrorException: " + e);
 				mException = e;
 			}
 

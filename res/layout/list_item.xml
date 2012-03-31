@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:textSize="10dp"
+        android:textSize="12dp"
         android:text="3/29/2012 4:00.00 PM"
         android:padding="6dp" />
 
