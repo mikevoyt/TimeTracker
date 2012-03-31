@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
+import com.amazonaws.AmazonClientException;
 import com.amazonaws.services.simpledb.model.Attribute;
 import com.amazonaws.services.simpledb.model.Item;
 import com.duff.timetracker.simpledb.SimpleDB;
@@ -48,6 +49,7 @@ public class DetailsActivity extends ListActivity {
 
 		private ProgressDialog mProgressDialog;
 		ArrayList<TimeEntryRecord> mRecords;
+		private AmazonClientException mException = null;
 
 		@Override
 		protected void onPreExecute() {
@@ -61,27 +63,32 @@ public class DetailsActivity extends ListActivity {
 		@Override
 		protected String doInBackground(String... params) {
 
-			List<Item> items = SimpleDB.getItemNamesForDomainFromUser(SimpleDB.DOMAIN_NAME, AppPreferences.getUserName());
+			try {
+				List<Item> items = SimpleDB.getItemNamesForDomainFromUser(SimpleDB.DOMAIN_NAME, AppPreferences.getUserName());
 
-			mRecords = new ArrayList<TimeEntryRecord>();
+				mRecords = new ArrayList<TimeEntryRecord>();
 
-			for (Item item : items) {
-				String itemName = item.getName();
-				List<Attribute> attributes = item.getAttributes();
-				TimeEntryRecord record = new TimeEntryRecord();
-				for (Attribute attribute : attributes) {
-					String name = attribute.getName();
-					String value = attribute.getValue();
-					if (name.equals(SimpleDB.DATE_ATTRIBUTE_NAME)) record.setDate(value);
-					if (name.equals(SimpleDB.TASK_ATTRIBUTE_NAME)) record.setTask(value);
-					if (name.equals(SimpleDB.PROJECT_ATTRIBUTE_NAME)) record.setProject(value);
-					if (name.equals(SimpleDB.HOURS_ATTRIBUTE_NAME)) record.setHours(value);
-					if (name.equals(SimpleDB.NOTES_ATTRIBUTE_NAME)) record.setNotes(value);
+				for (Item item : items) {
+					String itemName = item.getName();
+					List<Attribute> attributes = item.getAttributes();
+					TimeEntryRecord record = new TimeEntryRecord();
+					for (Attribute attribute : attributes) {
+						String name = attribute.getName();
+						String value = attribute.getValue();
+						if (name.equals(SimpleDB.DATE_ATTRIBUTE_NAME)) record.setDate(value);
+						if (name.equals(SimpleDB.TASK_ATTRIBUTE_NAME)) record.setTask(value);
+						if (name.equals(SimpleDB.PROJECT_ATTRIBUTE_NAME)) record.setProject(value);
+						if (name.equals(SimpleDB.HOURS_ATTRIBUTE_NAME)) record.setHours(value);
+						if (name.equals(SimpleDB.NOTES_ATTRIBUTE_NAME)) record.setNotes(value);
+					}
+					mRecords.add(record);
 				}
-				mRecords.add(record);
-			}
 
-			Log.d(TAG, "items: " + items);
+				Log.d(TAG, "items: " + items);
+			} catch (AmazonClientException e) {
+				Log.e(TAG,"AmazonClientException: " + e);
+				mException = e;
+			}
 
 			return null;
 		}
@@ -91,7 +98,14 @@ public class DetailsActivity extends ListActivity {
 		@Override
 		protected void onPostExecute(String result) {
 			mProgressDialog.hide();
-			setListAdapter(new TimeEntryAdapter(mContext, R.layout.list_item, mRecords));
+			if (mException != null)  {
+				Toast toast = Toast.makeText(mContext, "Network error, please try again", 3000);
+				toast.setGravity(Gravity.CENTER, 0, 0);
+				toast.show();
+			} else {
+				setListAdapter(new TimeEntryAdapter(mContext, R.layout.list_item, mRecords));
+
+			}
 		}
 	}	
 }
