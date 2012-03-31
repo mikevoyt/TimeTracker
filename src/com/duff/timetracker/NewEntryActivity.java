@@ -6,6 +6,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -101,6 +102,8 @@ public class NewEntryActivity extends Activity
 		});
 	}
 
+	private final static int EDIT_ACTION = 0;
+
 	private void initTaskSpinner(Project project) {
 		List<String> list = new ArrayList<String>();
 		
@@ -116,13 +119,31 @@ public class NewEntryActivity extends Activity
 
 			public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
 				if (adapterView.getItemAtPosition(i).toString().equals(ADD_NEW)) {
-					//todo: bring up add new Project dialog
+					Intent newTaskCategory = new Intent(mContext, NewCategoryActivity.class);
+					newTaskCategory.putExtra("title", "Enter new task name");
+					startActivityForResult(newTaskCategory, EDIT_ACTION);
 				}
 			}
 
 			public void onNothingSelected(AdapterView<?> adapterView) {
 			}
 		});
+	}
+
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		switch (requestCode) {
+			case EDIT_ACTION:
+				try {
+					String value = data.getStringExtra("value");
+					if (value != null && value.length() > 0) {
+						//todo: add new value to spinner
+					}
+				} catch (Exception e) {
+				}
+				break;
+			default:
+				break;
+		}
 	}
 
 	private void initSubmitButton() {

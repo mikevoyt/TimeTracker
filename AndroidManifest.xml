@@ -17,5 +17,8 @@
         <activity android:name=".SummaryActivity"/>
         <activity android:name=".DetailsActivity"/>
         <activity android:name=".NewEntryActivity"/>
+        <activity
+                android:name=".NewCategoryActivity"
+                android:theme="@android:style/Theme.Dialog" />
     </application>
 </manifest> 
