@@ -11,6 +11,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.*;
 import com.amazonaws.AmazonClientException;
@@ -91,7 +92,7 @@ public class NewEntryActivity extends Activity
 
 			public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
 				if (adapterView.getItemAtPosition(i).toString().equals(ADD_NEW)) {
-					//bring up add new Project dialog
+					newCategoryDialog("Enter New Project Name");
 				} else {
 					initTaskSpinner(mProjects.get(i));
 				}
@@ -119,9 +120,7 @@ public class NewEntryActivity extends Activity
 
 			public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
 				if (adapterView.getItemAtPosition(i).toString().equals(ADD_NEW)) {
-					Intent newTaskCategory = new Intent(mContext, NewCategoryActivity.class);
-					newTaskCategory.putExtra("title", "Enter new task name");
-					startActivityForResult(newTaskCategory, EDIT_ACTION);
+					newCategoryDialog("Enter New Task Name");
 				}
 			}
 
@@ -130,21 +129,6 @@ public class NewEntryActivity extends Activity
 		});
 	}
 
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		switch (requestCode) {
-			case EDIT_ACTION:
-				try {
-					String value = data.getStringExtra("value");
-					if (value != null && value.length() > 0) {
-						//todo: add new value to spinner
-					}
-				} catch (Exception e) {
-				}
-				break;
-			default:
-				break;
-		}
-	}
 
 	private void initSubmitButton() {
 		mSubmitButton.setOnClickListener(new View.OnClickListener() {
@@ -227,6 +211,33 @@ public class NewEntryActivity extends Activity
 			toast.setGravity(Gravity.CENTER, 0, 0);
 			toast.show();
 		}
+	}
+
+	private void newCategoryDialog(String title) {
+		// This example shows how to add a custom layout to an AlertDialog
+		LayoutInflater factory = LayoutInflater.from(this);
+		final View textEntryView = factory.inflate(R.layout.alert_dialog_new_category, null);
+		AlertDialog dialog = new AlertDialog.Builder(NewEntryActivity.this)
+				.setTitle(title)
+				.setView(textEntryView)
+				.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int whichButton) {
+						EditText editText = (EditText)textEntryView.findViewById(R.id.categoryEdit);
+						String name = editText.getText().toString();
+						if (name != null && name.length() > 0) {
+							//todo: add new value to spinner
+						}
+					}
+				})
+				.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int whichButton) {
+
+						/* User clicked cancel so do some stuff */
+					}
+				})
+				.create();
+
+		dialog.show();
 	}
 
 }
