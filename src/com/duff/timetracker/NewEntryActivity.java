@@ -84,6 +84,7 @@ public class NewEntryActivity extends Activity
 			list.add(project.getName());
 		}
 		list.add(ADD_NEW);
+
 		final ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
 				android.R.layout.simple_spinner_item, list);
 		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -92,7 +93,16 @@ public class NewEntryActivity extends Activity
 
 			public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
 				if (adapterView.getItemAtPosition(i).toString().equals(ADD_NEW)) {
-					newCategoryDialog("Enter New Project Name", dataAdapter, mProjectSpinner);
+					newCategoryDialog("Enter New Project Name", new NewCategoryCallback() {
+						public void ok(String newCategoryName) {
+							dataAdapter.insert(newCategoryName, 0);
+							Project newProject = new Project(newCategoryName);
+							mProjects.add(newProject);
+							initProjectSpinner();
+							mProjectSpinner.setSelection(mProjects.size()-2);
+							initTaskSpinner(newProject);
+						}
+					});
 				} else {
 					initTaskSpinner(mProjects.get(i));
 				}
@@ -103,7 +113,7 @@ public class NewEntryActivity extends Activity
 		});
 	}
 
-	private void initTaskSpinner(Project project) {
+	private void initTaskSpinner(final Project project) {
 		List<String> list = new ArrayList<String>();
 		
 		for (String task : project.getTasks()) {
@@ -118,7 +128,13 @@ public class NewEntryActivity extends Activity
 
 			public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
 				if (adapterView.getItemAtPosition(i).toString().equals(ADD_NEW)) {
-					newCategoryDialog("Enter New Task Name", dataAdapter, mTaskSpinner);
+					newCategoryDialog("Enter New Task Name", new NewCategoryCallback() {
+						public void ok(String newCategoryName) {
+							dataAdapter.insert(newCategoryName, 0);
+							mTaskSpinner.setSelection(0);
+							project.addTask(newCategoryName);
+						}
+					});
 				}
 			}
 
@@ -211,7 +227,7 @@ public class NewEntryActivity extends Activity
 		}
 	}
 
-	private void newCategoryDialog(String title, final ArrayAdapter adapter, final Spinner spinner) {
+	private void newCategoryDialog(String title, final NewCategoryCallback callback) {
 		// This example shows how to add a custom layout to an AlertDialog
 		LayoutInflater factory = LayoutInflater.from(this);
 		final View textEntryView = factory.inflate(R.layout.alert_dialog_new_category, null);
@@ -223,8 +239,7 @@ public class NewEntryActivity extends Activity
 						EditText editText = (EditText)textEntryView.findViewById(R.id.categoryEdit);
 						String name = editText.getText().toString();
 						if (name != null && name.length() > 0) {
-							adapter.insert(name, 0);
-							spinner.setSelection(0);
+							callback.ok(name);
 						}
 					}
 				})
@@ -237,6 +252,10 @@ public class NewEntryActivity extends Activity
 				.create();
 
 		dialog.show();
+	}
+
+	private interface NewCategoryCallback {
+		public void ok(String newCategoryName);
 	}
 
 }
