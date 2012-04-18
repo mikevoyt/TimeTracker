@@ -8,6 +8,8 @@ import java.util.ArrayList;
  *
  */
 public interface RemoteAccess {
+	boolean login() throws NetworkErrorException;
+	boolean logout() throws NetworkErrorException;
 	ArrayList<TimeEntryRecord> getAllEntries() throws NetworkErrorException;
 	void addNewEntry(TimeEntryRecord entry) throws NetworkErrorException;
 }
