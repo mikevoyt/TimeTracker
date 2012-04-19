@@ -56,7 +56,10 @@ public class SimpleDB {
 
 	public static AmazonSimpleDBClient getInstance() {
 		if (mSdbClient == null) {
-			AWSCredentials credentials = new BasicAWSCredentials(PropertyLoader.getInstance().getAccessKey(), PropertyLoader.getInstance().getSecretKey());
+			if (!PropertyLoader.getInstance().hasCredentials()) {
+				throw new RuntimeException("Cant find credentials!!!!!");
+			}
+				AWSCredentials credentials = new BasicAWSCredentials(PropertyLoader.getInstance().getAccessKey(), PropertyLoader.getInstance().getSecretKey());
 			mSdbClient = new AmazonSimpleDBClient(credentials);
 		}
 
