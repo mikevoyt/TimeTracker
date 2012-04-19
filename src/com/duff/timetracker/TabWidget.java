@@ -1,7 +1,5 @@
 package com.duff.timetracker;
 
-import com.duff.timetracker.R.*;
-
 import android.app.TabActivity;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -25,22 +23,23 @@ public class TabWidget extends TabActivity {
 
 		// Initialize a TabSpec for each tab and add it to the TabHost
 		spec = tabHost.newTabSpec("newentry").setIndicator("Add New Entry",
-				res.getDrawable(drawable.ic_tab_plus))
+				res.getDrawable(android.R.drawable.ic_menu_add))
 				.setContent(intent);
 		tabHost.addTab(spec);
 
 		// Do the same for the other tabs
-		intent = new Intent().setClass(this, SummaryActivity.class);
-		spec = tabHost.newTabSpec("summary").setIndicator("Summary",
-				res.getDrawable(drawable.ic_tab_graph))
+		intent = new Intent().setClass(this, DetailsActivity.class);
+		spec = tabHost.newTabSpec("details").setIndicator("Details",
+				res.getDrawable(android.R.drawable.ic_menu_info_details))
 				.setContent(intent);
 		tabHost.addTab(spec);
 
-		intent = new Intent().setClass(this, DetailsActivity.class);
-		spec = tabHost.newTabSpec("details").setIndicator("Details",
-				res.getDrawable(drawable.ic_tab_database))
+		intent = new Intent().setClass(this, ConfigureActivity.class);
+		spec = tabHost.newTabSpec("configure").setIndicator("Configure",
+				res.getDrawable(android.R.drawable.ic_menu_preferences))
 				.setContent(intent);
 		tabHost.addTab(spec);
+
 
 		tabHost.setCurrentTab(0);
 	}	
