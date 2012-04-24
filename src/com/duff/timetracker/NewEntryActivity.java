@@ -190,7 +190,7 @@ public class NewEntryActivity extends Activity
 
 			try {
 				TimeEntryRecord timeEntryRecord = new TimeEntryRecord();
-				String date = new java.text.SimpleDateFormat("MM/dd/yyyy hh:mm:ss a").format(new java.util.Date());
+				String date = new java.text.SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss'Z'").format(new java.util.Date());
 				timeEntryRecord.setDate(date);
 				timeEntryRecord.setProject(project);
 				timeEntryRecord.setTask(task);

@@ -27,6 +27,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -63,8 +64,10 @@ public class RestAPIAccess implements RemoteAccess {
 				JSONObject jsonObject = jsonArray.getJSONObject(i);
 				record.setProject(jsonObject.getString("project_name"));
 				record.setTask(jsonObject.getString("task_name"));
-				record.setHours(jsonObject.getString("hours").toString());
-				//record.setDate(jsonObject.getString("date"));
+				double hours = jsonObject.getDouble("hours");
+				DecimalFormat df = new DecimalFormat("#.#");
+				record.setHours(df.format(hours));
+				record.setDate(jsonObject.getString("performed_on"));
 				String notes = jsonObject.getString("notes");
 				if (notes == null) notes = "";
 				record.setNotes(notes);
@@ -92,8 +95,9 @@ public class RestAPIAccess implements RemoteAccess {
 			JSONObject jsonObject = new JSONObject();
 			jsonObject.put("project_name", entry.getProject());
 			jsonObject.put("task_name", entry.getTask());
-			jsonObject.put("hours", Integer.parseInt(entry.getHours()));
+			jsonObject.put("hours", Double.parseDouble(entry.getHours()));
 			jsonObject.put("notes", entry.getNotes());
+			jsonObject.put("performed_on", entry.getDate());
 			StringEntity se = new StringEntity( jsonObject.toString());
 
 			httppost.setEntity(se);
