@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.amazonaws.AmazonClientException;
 import com.amazonaws.services.simpledb.model.Attribute;
 import com.amazonaws.services.simpledb.model.Item;
+import com.duff.timetracker.restapi.RestAPIAccess;
 import com.duff.timetracker.simpledb.SimpleDB;
 import com.duff.timetracker.simpledb.SimpleDBAccess;
 
@@ -62,7 +63,7 @@ public class DetailsActivity extends ListActivity {
 		protected String doInBackground(String... params) {
 
 			try {
-				RemoteAccess remoteAccess = new SimpleDBAccess(); //swap this out for different back-ends
+				RemoteAccess remoteAccess = new RestAPIAccess(); //swap this out for different back-ends
 				mRecords = remoteAccess.getAllEntries();
 
 			} catch (NetworkErrorException e) {
