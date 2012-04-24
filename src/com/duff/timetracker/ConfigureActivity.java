@@ -37,6 +37,12 @@ import java.util.List;
 public class ConfigureActivity extends Activity {
 
 	private final String TAG = "TimeTracker";
+
+	//the following stuff is hardcoded now for development
+	private final String SERVER_URL = "http://10.0.2.2:3000/timesheet_entries.json";
+	private final String USER_NAME = "example@railstutorial.org";
+	private final String PASSWORD = "foobar";
+
 	private EditText mUserNameEditText;
 	private EditText mPasswordEditText;
 	private Button mLoginButton;
@@ -55,16 +61,10 @@ public class ConfigureActivity extends Activity {
 				String password = mPasswordEditText.getText().toString();
 				Log.d(TAG, "logging in with: username=" + username + ", password=" + password);
 
-				//test: read timesheet entries
-				postData();
-				//readAndDumpTimesheetEntries();
+				//postData();
+				readAndDumpTimesheetEntries();
 
 
-				try {
-					//getServerData();
-				} catch (Exception e) {
-					Log.d(TAG, e.toString());
-				}
 			}
 		});
 
@@ -92,8 +92,13 @@ public class ConfigureActivity extends Activity {
 	public String readTimesheetEntries() {
 		StringBuilder builder = new StringBuilder();
 		HttpClient client = new DefaultHttpClient();
-		HttpGet httpGet = new HttpGet(
-				"https://dufftimesheet.herokuapp.com/timesheet_entries.json");
+		HttpGet httpGet = new HttpGet(SERVER_URL);
+		httpGet.setHeader("Content-Type", "application/json; charset=utf-8");
+
+		byte[] encodeString = Base64.encode((USER_NAME + ":" + PASSWORD).getBytes(), Base64.NO_WRAP);
+		String d = new String(encodeString);
+		httpGet.setHeader("Authorization", "Basic " + d);
+
 		try {
 			HttpResponse response = client.execute(httpGet);
 			StatusLine statusLine = response.getStatusLine();
@@ -120,46 +125,21 @@ public class ConfigureActivity extends Activity {
 
 
 	public void postData() {
-
-
-		//CredentialsProvider credProvider = new BasicCredentialsProvider();
-		//credProvider.setCredentials(new AuthScope(AuthScope.ANY_HOST, AuthScope.ANY_PORT),
-				//new UsernamePasswordCredentials("example@railstutorial.org", "foobar"));
-		//
-		//DefaultHttpClient http = new DefaultHttpClient();
-
 		// Create a new HttpClient and Post Header
 		DefaultHttpClient httpclient = new DefaultHttpClient();
-		//httpclient.setCredentialsProvider(credProvider);
-
-
-
-
-		HttpPost httppost = new HttpPost("http://10.0.2.2:3000/timesheet_entries.json");
-		//httppost.setHeader("Accept", "application/json");
+		HttpPost httppost = new HttpPost(SERVER_URL);
 		httppost.setHeader("Content-Type", "application/json; charset=utf-8");
 
-		//httpclient.getCredentialsProvider().setCredentials(
-		//		new AuthScope(AuthScope.ANY_HOST, AuthScope.ANY_PORT),
-		//		new UsernamePasswordCredentials("example@railstutorial.org", "foobar"));
-
-		byte[] encodeString = Base64.encode("example@railstutorial.org:foobar".getBytes(), Base64.NO_WRAP);
+		byte[] encodeString = Base64.encode((USER_NAME + ":" + PASSWORD).getBytes(), Base64.NO_WRAP);
 		String d = new String(encodeString);
-		Log.d(TAG, d);
-		//should be ZXhhbXBsZUByYWlsc3R1dG9yaWFsLm9yZzpmb29iYXI=
 		httppost.setHeader("Authorization", "Basic " + d);
-				//Base64.encode("example@railstutorial.org:foobar".getBytes(), Base64.NO_WRAP));
 
 		try {
-			// Add your data
-			//List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
-			//nameValuePairs.add(new BasicNameValuePair("authenticity_token", "ZAiU8Rq1fUaJvoS6YfGGhRn2MNDvUxoVQs/M6aR47Uc="));
-			//nameValuePairs.add(new BasicNameValuePair("session[email]", "example@railstutorial.org"));
-			//nameValuePairs.add(new BasicNameValuePair("session[password]", "foobar"));
-			//httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+			JSONObject jsonObject = new JSONObject();
+			jsonObject.put("project_name", "yay JSONObject!!"); //Data being sent to the server, which should produce a reply
+			jsonObject.put("hours", 4); //Data being sent to the server, which should produce a reply
+			StringEntity se = new StringEntity( jsonObject.toString());
 
-			StringEntity se = new StringEntity("{\"project_name\":\"from android\",\"hours\":1}");
-			//StringEntity se = new StringEntity("{}");
 			httppost.setEntity(se);
 
 			// Execute HTTP Post Request
@@ -170,43 +150,9 @@ public class ConfigureActivity extends Activity {
 			Log.e(TAG, e.toString());
 		} catch (IOException e) {
 			Log.e(TAG, e.toString());
+		} catch (JSONException e) {
+			Log.e(TAG, e.toString());
 		}
-	}
-
-	public ArrayList<String> getServerData() throws JSONException, ClientProtocolException, IOException {
-		ArrayList<String> stringData = new ArrayList<String>();
-
-
-		CredentialsProvider credProvider = new BasicCredentialsProvider();
-		credProvider.setCredentials(new AuthScope(AuthScope.ANY_HOST, AuthScope.ANY_PORT),
-				new UsernamePasswordCredentials("example@railstutorial.org", "foobar"));
-		//
-		DefaultHttpClient httpClient = new DefaultHttpClient();
-		httpClient.setCredentialsProvider(credProvider);
-
-
-		ResponseHandler<String> resonseHandler = new BasicResponseHandler();
-		//special development host IP address
-		HttpPost postMethod = new HttpPost("https://10.0.2.2:3000/timesheet_entries.json");
-		postMethod.setHeader("Content-type", "application/json");
-		List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
-
-		JSONObject jsonObject = new JSONObject();
-		jsonObject.put("key", ""); //Data being sent to the server, which should produce a reply
-
-		nameValuePairs.add(new BasicNameValuePair("jsonString", jsonObject.toString()));
-		postMethod.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-		String response = httpClient.execute(postMethod, resonseHandler);
-
-		JSONObject jsonResponse = new JSONObject(response);
-
-		JSONArray serverData1 = jsonResponse.getJSONArray("data1");
-		JSONArray serverData2 = jsonResponse.getJSONArray("data2");
-		for(int i = 0; i < serverData1.length() && i < serverData2.length(); i++) {
-			//Do something with the data
-		}
-
-		return null; //the data;
 	}
 
 }
