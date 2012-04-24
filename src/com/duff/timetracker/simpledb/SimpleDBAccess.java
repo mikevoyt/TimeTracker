@@ -18,12 +18,16 @@ import java.util.List;
 public class SimpleDBAccess implements RemoteAccess  {
 	private static String TAG = "TimeTracker";
 
-	public boolean login() throws NetworkErrorException {
+	public boolean login(String server, String userName, String password) throws NetworkErrorException {
 		return false;
 	}
 
 	public boolean logout() throws NetworkErrorException {
 		return false;
+	}
+
+	public boolean isLoggedIn() {
+		return true;
 	}
 
 	public ArrayList<TimeEntryRecord> getAllEntries() throws NetworkErrorException {

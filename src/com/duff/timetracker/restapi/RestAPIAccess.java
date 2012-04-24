@@ -36,18 +36,51 @@ import java.util.List;
  */
 public class RestAPIAccess implements RemoteAccess {
 
+	public static final String REMOTE_SERVER_URL = "https://dufftimesheet.herokuapp.com/timesheet_entries.json";
+	public static final String LOCAL_SERVER_URL = "http://10.0.2.2:3000/timesheet_entries.json";
 	private final String TAG = "TimeTracker";
-	private final String SERVER_URL = "http://10.0.2.2:3000/timesheet_entries.json";
-	private final String USER_NAME = "example@railstutorial.org";
-	private final String PASSWORD = "foobar";
+	private static String mServer;
+	private static String mUserName;
+	private static String mPassword;
+	private static boolean mLoggedIn;
 
+	public boolean login(String server, String userName, String password) throws NetworkErrorException {
+		mLoggedIn = false;
+		HttpClient client = new DefaultHttpClient();
+		HttpGet httpGet = new HttpGet(server);
+		httpGet.setHeader("Content-Type", "application/json; charset=utf-8");
 
-	public boolean login() throws NetworkErrorException {
-		return false;
+		byte[] encodeString = Base64.encode((userName + ":" + password).getBytes(), Base64.NO_WRAP);
+		String d = new String(encodeString);
+		httpGet.setHeader("Authorization", "Basic " + d);
+
+		try {
+			HttpResponse response = client.execute(httpGet);
+			StatusLine statusLine = response.getStatusLine();
+			int statusCode = statusLine.getStatusCode();
+			if (statusCode == 200) {
+				mServer = server;
+				mUserName = userName;
+				mPassword = password;
+				mLoggedIn = true;
+			} else {
+			}
+		} catch (ClientProtocolException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return mLoggedIn;
 	}
 
 	public boolean logout() throws NetworkErrorException {
+		mLoggedIn = false;
 		return false;
+	}
+
+	public boolean isLoggedIn() {
+		return mLoggedIn;
 	}
 
 	public ArrayList<TimeEntryRecord> getAllEntries() throws NetworkErrorException {
@@ -84,10 +117,10 @@ public class RestAPIAccess implements RemoteAccess {
 
 		// Create a new HttpClient and Post Header
 		DefaultHttpClient httpclient = new DefaultHttpClient();
-		HttpPost httppost = new HttpPost(SERVER_URL);
+		HttpPost httppost = new HttpPost(mServer);
 		httppost.setHeader("Content-Type", "application/json; charset=utf-8");
 
-		byte[] encodeString = Base64.encode((USER_NAME + ":" + PASSWORD).getBytes(), Base64.NO_WRAP);
+		byte[] encodeString = Base64.encode((mUserName + ":" + mPassword).getBytes(), Base64.NO_WRAP);
 		String d = new String(encodeString);
 		httppost.setHeader("Authorization", "Basic " + d);
 
@@ -120,10 +153,10 @@ public class RestAPIAccess implements RemoteAccess {
 	public String readTimesheetEntries() {
 		StringBuilder builder = new StringBuilder();
 		HttpClient client = new DefaultHttpClient();
-		HttpGet httpGet = new HttpGet(SERVER_URL);
+		HttpGet httpGet = new HttpGet(mServer);
 		httpGet.setHeader("Content-Type", "application/json; charset=utf-8");
 
-		byte[] encodeString = Base64.encode((USER_NAME + ":" + PASSWORD).getBytes(), Base64.NO_WRAP);
+		byte[] encodeString = Base64.encode((mUserName + ":" + mPassword).getBytes(), Base64.NO_WRAP);
 		String d = new String(encodeString);
 		httpGet.setHeader("Authorization", "Basic " + d);
 

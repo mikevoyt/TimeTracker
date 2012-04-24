@@ -171,6 +171,7 @@ public class NewEntryActivity extends Activity
 
 		private ProgressDialog mProgressDialog;
 		private NetworkErrorException mException = null;
+		private boolean mNeedsLogin;
 
 		@Override
 		protected void onPreExecute() {
@@ -198,7 +199,11 @@ public class NewEntryActivity extends Activity
 				timeEntryRecord.setNotes(notes);
 
 				RemoteAccess remoteAccess = new RestAPIAccess();  //swap this for different remote access mechanisms
-				remoteAccess.addNewEntry(timeEntryRecord);
+				if (!remoteAccess.isLoggedIn()) {
+					mNeedsLogin = true;
+				} else {
+					remoteAccess.addNewEntry(timeEntryRecord);
+				}
 			} catch (NetworkErrorException e) {
 				Log.e(TAG,"NetworkErrorException: " + e);
 				mException = e;
@@ -213,6 +218,8 @@ public class NewEntryActivity extends Activity
 			String displayText;
 			if (mException != null) {
 				displayText = "Network error, please try again";
+			} else if (mNeedsLogin) {
+				displayText = "Please log in";
 			} else {
 				mHoursEditText.setText("");
 				mNotesEditText.setText("");

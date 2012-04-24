@@ -50,6 +50,7 @@ public class DetailsActivity extends ListActivity {
 		private ProgressDialog mProgressDialog;
 		ArrayList<TimeEntryRecord> mRecords;
 		private  NetworkErrorException mException = null;
+		private boolean mNeedsLogin;
 
 		@Override
 		protected void onPreExecute() {
@@ -64,7 +65,11 @@ public class DetailsActivity extends ListActivity {
 
 			try {
 				RemoteAccess remoteAccess = new RestAPIAccess(); //swap this out for different back-ends
-				mRecords = remoteAccess.getAllEntries();
+				if (!remoteAccess.isLoggedIn()) {
+					mNeedsLogin = true;
+				} else {
+					mRecords = remoteAccess.getAllEntries();
+				}
 
 			} catch (NetworkErrorException e) {
 				Log.e(TAG,"NetworkErrorException: " + e);
@@ -79,7 +84,12 @@ public class DetailsActivity extends ListActivity {
 		@Override
 		protected void onPostExecute(String result) {
 			mProgressDialog.hide();
-			if (mException != null)  {
+			if (mNeedsLogin) {
+				Toast toast = Toast.makeText(mContext, "Please log in", 3000);
+				toast.setGravity(Gravity.CENTER, 0, 0);
+				toast.show();
+			}
+			else if (mException != null)  {
 				Toast toast = Toast.makeText(mContext, "Network error, please try again", 3000);
 				toast.setGravity(Gravity.CENTER, 0, 0);
 				toast.show();
