@@ -6,7 +6,6 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,9 +13,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.*;
-import com.amazonaws.AmazonClientException;
-import com.duff.timetracker.simpledb.SimpleDB;
-import com.duff.timetracker.simpledb.SimpleDBAccess;
+import com.duff.timetracker.restapi.RestAPIAccess;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -200,7 +197,7 @@ public class NewEntryActivity extends Activity
 				timeEntryRecord.setHours(hours);
 				timeEntryRecord.setNotes(notes);
 
-				RemoteAccess remoteAccess = new SimpleDBAccess();  //swap this for different remote access mechanisms
+				RemoteAccess remoteAccess = new RestAPIAccess();  //swap this for different remote access mechanisms
 				remoteAccess.addNewEntry(timeEntryRecord);
 			} catch (NetworkErrorException e) {
 				Log.e(TAG,"NetworkErrorException: " + e);

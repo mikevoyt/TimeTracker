@@ -144,6 +144,8 @@ public class ConfigureActivity extends Activity {
 
 			// Execute HTTP Post Request
 			HttpResponse response = httpclient.execute(httppost);
+
+			//todo: verify 201 code (created)
 			Log.d(TAG, response.toString());
 
 		} catch (ClientProtocolException e) {
