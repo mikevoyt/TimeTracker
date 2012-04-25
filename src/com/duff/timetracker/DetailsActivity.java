@@ -40,6 +40,9 @@ public class DetailsActivity extends ListActivity {
 	protected void onResume() {
 		super.onResume();
 
+		//clear list
+		setListAdapter(new TimeEntryAdapter(mContext, R.layout.list_item, new ArrayList<TimeEntryRecord>()));
+
 		LoadEntriesTask loadEntriesTask = new LoadEntriesTask();
 		loadEntriesTask.execute();
 	}

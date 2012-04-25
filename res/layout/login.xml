@@ -36,6 +36,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
             android:imeOptions="actionDone"
+            android:password="true"
             />
 
 
