@@ -109,7 +109,7 @@ public class ConfigureActivity extends Activity {
 				mLogoutView.setVisibility(View.VISIBLE);
 				setContentView(mLogoutView);
 				final RemoteAccess remote = new RestAPIAccess();
-				mLoggedInAsEditText.setText("Logged in as:" + mUserNameEditText.getText());
+				mLoggedInAsEditText.setText("Logged in as:  " + mUserNameEditText.getText());
 				mLogoutButton.setOnClickListener(new View.OnClickListener() {
 					public void onClick(View view) {
 						try {

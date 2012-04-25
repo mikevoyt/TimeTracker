@@ -36,8 +36,8 @@ import java.util.List;
  */
 public class RestAPIAccess implements RemoteAccess {
 
-	public static final String REMOTE_SERVER_URL = "https://dufftimesheet.herokuapp.com/timesheet_entries.json";
-	public static final String LOCAL_SERVER_URL = "http://10.0.2.2:3000/timesheet_entries.json";
+	public static final String REMOTE_SERVER_URL = "https://timetrackerservice.herokuapp.com/tasks.json";
+	public static final String LOCAL_SERVER_URL = "http://10.0.2.2:3000/tasks.json";
 	private final String TAG = "TimeTracker";
 	private static String mServer;
 	private static String mUserName;
