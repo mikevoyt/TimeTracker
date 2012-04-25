@@ -75,6 +75,9 @@ public class RestAPIAccess implements RemoteAccess {
 	}
 
 	public boolean logout() throws NetworkErrorException {
+		//todo: destroy session
+		mUserName = null;
+		mPassword = null;
 		mLoggedIn = false;
 		return false;
 	}
